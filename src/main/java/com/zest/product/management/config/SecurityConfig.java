@@ -79,13 +79,10 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // Enforce HTTPS only in production (Commented for easier local Docker
-        // verification)
-        /*
-         * if (Arrays.asList(env.getActiveProfiles()).contains("prod")) {
-         * http.requiresChannel(channel -> channel.anyRequest().requiresSecure());
-         * }
-         */
+        // Enforce HTTPS only in production
+        if (Arrays.asList(env.getActiveProfiles()).contains("prod")) {
+            http.requiresChannel(channel -> channel.anyRequest().requiresSecure());
+        }
 
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
