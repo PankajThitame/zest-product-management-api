@@ -89,6 +89,23 @@ mvn test
 - `fix: handle lazy loading in item retrieval`
 - `refactor: move to constructor injection for all services`
 
+## HTTPS & Production Considerations
+
+While HTTPS is critical in production environments, this project runs over HTTP in local and Dockerized environments for simplicity.
+
+In real-world deployments, HTTPS enforcement should be handled at infrastructure level such as:
+
+- Nginx reverse proxy
+- Cloud Load Balancer (AWS ALB, Azure Front Door, etc.)
+- API Gateway
+
+Spring Boot application typically runs behind such reverse proxy and communicates internally over HTTP.
+
+This design ensures:
+- Secure encrypted communication externally
+- Simplified container configuration
+- Separation of infrastructure and application responsibilities
+
 ## Assumptions & Decisions
 - **Async Export**: Simulated using `@Async` to show handling of long-running tasks.
 - **Single Session**: Refresh token rotation is implemented to allow only one active refresh token per user at a time.
