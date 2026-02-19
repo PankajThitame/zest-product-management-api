@@ -2,6 +2,8 @@
 
 A production-ready Product Management System built with Spring Boot 3, featuring JWT authentication with Refresh Token rotation, JPA Auditing, and containerization.
 
+This project was developed as part of a backend technical evaluation, with focus on clean architecture, secure authentication, and production-readiness.
+
 ## Tech Stack
 
 - **Java 17**
@@ -28,13 +30,13 @@ The project is structured following the **Controller-Service-Repository** patter
 
 ### Key Performance & Security Decisions
 - **Database Indexing**: Indexes are explicitly defined on `product_name` and `product_id` (foreign key) in the JPA entities to optimize lookup performance.
-- **Refresh Token Rotation**: Implemented using an **Upsert Strategy**. This prevents `DuplicateKeyException` during high-frequency rotation while ensuring only one valid session exists per user.
-- **Async Execution**: The `simulateSlowExport` method uses Spring's `@Async` to prevent blocking the main request thread during long-running tasks.
+- **Refresh Token Rotation**: Implemented using an update-if-exists approach. This avoids duplicate token entries and ensures only one active refresh session per user.
+- **Async Execution**: A sample async method (simulateSlowExport) is included to demonstrate handling of long-running operations without blocking the main request thread.
 - **Global Error Handling**: A `@RestControllerAdvice` ensures that even security exceptions (like `AccessDenied`) are returned as valid JSON objects instead of standard Spring error pages.
 
 ## Architecture
 
-The project follows a **Layered Clean Architecture**:
+The project follows a clean layered structure to keep responsibilities separated and the codebase maintainable:
 
 - `controller`: REST Endpoints and API documentation.
 - `service`: Core business logic and transaction management.
@@ -65,6 +67,8 @@ The project follows a **Layered Clean Architecture**:
 docker-compose up --build
 ```
 
+Note: Ensure that port 8080 and database ports are not already in use on your system before starting containers.
+
 ## Security Flow
 
 1. **Registration**: `POST /api/v1/auth/register`
@@ -75,7 +79,7 @@ docker-compose up --build
 
 ## API Documentation
 Once the app is running, access Swagger UI at:
-[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
 ## Testing
 The project includes unit and integration tests. Run them using:
