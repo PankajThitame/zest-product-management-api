@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: zest_mysql_prod
+    environment:
+      MYSQL_DATABASE: zest_product
+      MYSQL_USER: zest_user
+      MYSQL_PASSWORD: zest_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    networks:
+      - zest_network
+
+  app:
+    build: .
+    container_name: zest_product_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/zest_product?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: zest_user
+      SPRING_DATASOURCE_PASSWORD: zest_password
+      SPRING_PROFILES_ACTIVE: prod
+    networks:
+      - zest_network
+    restart: always
+
+networks:
+  zest_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
