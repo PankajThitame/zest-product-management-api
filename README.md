@@ -6,7 +6,7 @@ This project was developed as part of a backend technical evaluation, with focus
 
 ## Tech Stack
 
-- **Java 17 LTS**
+- **Java 21 LTS**
 - **Spring Boot 3.2.2**
 - **Spring Data JPA**
 - **Spring Security** (JWT + Refresh Token Rotation)
