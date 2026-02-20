@@ -51,11 +51,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void registerUser_ShouldReturnSuccess() throws Exception {
-        SignupRequest signupRequest = new SignupRequest();
-        signupRequest.setUsername("testuser");
-        signupRequest.setEmail("test@example.com");
-        signupRequest.setPassword("password123");
-        signupRequest.setRoles(Set.of("user"));
+        SignupRequest signupRequest = new SignupRequest("testuser", "test@example.com", Set.of("user"), "password123");
 
         mockMvc.perform(post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -67,20 +63,14 @@ class AuthControllerIntegrationTest {
     @Test
     void loginUser_WithValidCredentials_ShouldReturnJwt() throws Exception {
         // First register
-        SignupRequest signupRequest = new SignupRequest();
-        signupRequest.setUsername("authuser");
-        signupRequest.setEmail("auth@example.com");
-        signupRequest.setPassword("password123");
-        signupRequest.setRoles(Set.of("user"));
+        SignupRequest signupRequest = new SignupRequest("authuser", "auth@example.com", Set.of("user"), "password123");
 
         mockMvc.perform(post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(signupRequest)));
 
         // Then login
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername("authuser");
-        loginRequest.setPassword("password123");
+        LoginRequest loginRequest = new LoginRequest("authuser", "password123");
 
         String loginResponse = mockMvc.perform(post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -103,9 +93,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void loginUser_WithInvalidCredentials_ShouldReturn401() throws Exception {
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername("nonexistent");
-        loginRequest.setPassword("wrongpassword");
+        LoginRequest loginRequest = new LoginRequest("nonexistent", "wrongpassword");
 
         mockMvc.perform(post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)

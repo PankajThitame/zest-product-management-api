@@ -41,7 +41,7 @@ public class AuthService {
 
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
@@ -60,21 +60,21 @@ public class AuthService {
 
     @Transactional
     public void registerUser(SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+        if (userRepository.existsByUsername(signUpRequest.username())) {
             throw new RuntimeException("Error: Username is already taken!");
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signUpRequest.email())) {
             throw new RuntimeException("Error: Email is already in use!");
         }
 
         User user = User.builder()
-                .username(signUpRequest.getUsername())
-                .email(signUpRequest.getEmail())
-                .password(encoder.encode(signUpRequest.getPassword()))
+                .username(signUpRequest.username())
+                .email(signUpRequest.email())
+                .password(encoder.encode(signUpRequest.password()))
                 .build();
 
-        Set<String> strRoles = signUpRequest.getRoles();
+        Set<String> strRoles = signUpRequest.roles();
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {

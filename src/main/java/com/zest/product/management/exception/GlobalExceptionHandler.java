@@ -46,9 +46,7 @@ public class GlobalExceptionHandler {
         @ExceptionHandler(MethodArgumentNotValidException.class)
         public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex,
                         WebRequest request) {
-                String errorMessage = ex.getBindingResult().getFieldErrors().stream()
-                                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                                .collect(Collectors.joining(", "));
+                String errorMessage = ex.getBindingResult().getFieldErrors().getFirst().getDefaultMessage();
 
                 ErrorResponse errorResponse = ErrorResponse.builder()
                                 .status(HttpStatus.BAD_REQUEST.value())
