@@ -3,6 +3,7 @@ package com.zest.product.management.config;
 import com.zest.product.management.security.AuthEntryPointJwt;
 import com.zest.product.management.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +36,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final Environment env;
     private final UserDetailsService userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -83,6 +85,11 @@ public class SecurityConfig {
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated());
+
+        // Strictly enforce HTTPS only in production as per assignment requirements
+        if (Arrays.asList(env.getActiveProfiles()).contains("prod")) {
+            http.requiresChannel(channel -> channel.anyRequest().requiresSecure());
+        }
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

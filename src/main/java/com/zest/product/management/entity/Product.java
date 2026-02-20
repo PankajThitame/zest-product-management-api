@@ -12,7 +12,7 @@ import java.util.List;
  * Includes indexing on productName for performance and uniqueness constraints.
  */
 @Entity
-@Table(name = "products", indexes = {
+@Table(name = "product", indexes = {
         @Index(name = "idx_product_name", columnList = "product_name")
 })
 @Getter

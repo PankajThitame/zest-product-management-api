@@ -9,7 +9,7 @@ import lombok.*;
  * Indexed on product_id for faster lookups.
  */
 @Entity
-@Table(name = "items", indexes = {
+@Table(name = "item", indexes = {
         @Index(name = "idx_item_product_id", columnList = "product_id")
 })
 @Getter
