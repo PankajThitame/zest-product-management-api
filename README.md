@@ -30,6 +30,7 @@ The project is structured following the **Controller-Service-Repository** patter
 
 ### Key Performance & Security Decisions
 - **Database Indexing**: Indexes are explicitly defined on `product_name` and `product_id` (foreign key) in the JPA entities to optimize lookup performance.
+- **Pagination & Sorting**: Implemented for the product list endpoint using Spring Data JPA's `Pageable`. This allows clients to handle large datasets efficiently.
 - **Refresh Token Rotation**: Implemented using an update-if-exists approach. This avoids duplicate token entries and ensures only one active refresh session per user.
 - **Async Execution**: A sample async method (simulateSlowExport) is included to demonstrate handling of long-running operations without blocking the main request thread.
 - **Global Error Handling**: A `@RestControllerAdvice` ensures that even security exceptions (like `AccessDenied`) are returned as valid JSON objects instead of standard Spring error pages.
