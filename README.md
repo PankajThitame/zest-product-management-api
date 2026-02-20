@@ -33,6 +33,9 @@ The project is structured following the **Controller-Service-Repository** patter
 - **Pagination & Sorting**: Implemented for the product list endpoint using Spring Data JPA's `Pageable`. This allows clients to handle large datasets efficiently.
 - **Refresh Token Rotation**: Implemented using an update-if-exists approach. This avoids duplicate token entries and ensures only one active refresh session per user.
 - **Async Execution**: A sample async method (simulateSlowExport) is included to demonstrate handling of long-running operations without blocking the main request thread.
+- **Role-based Authorization**: `ADMIN` and `USER` roles are enforced using Spring Security annotations (e.g., `@PreAuthorize`) to protect sensitive endpoints.
+- **Input Validation**: Robust DTO validation using **Jakarta Validation** ensures request data integrity and prevents malicious input.
+- **CORS Configured**: Securely allows controlled cross-origin access, essential for modern frontend integration.
 - **Global Error Handling**: A `@RestControllerAdvice` ensures that even security exceptions (like `AccessDenied`) are returned as valid JSON objects instead of standard Spring error pages.
 
 ## Architecture
@@ -51,7 +54,7 @@ The project follows a clean layered structure to keep responsibilities separated
 ## Setup Instructions
 
 ### Prerequisites
-- JDK 17
+- JDK 21 LTS
 - Maven 3.8+
 - Docker & Docker Compose (optional)
 
